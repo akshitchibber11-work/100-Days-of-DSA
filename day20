@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Hash map node
+typedef struct Node {
+    int key;           // prefix sum
+    int count;         // how many times seen
+    struct Node* next;
+} Node;
+
+#define TABLE_SIZE 10007
+
+Node* hashTable[TABLE_SIZE];
+
+// Hash function
+int hash(int key) {
+    int h = key % TABLE_SIZE;
+    if (h < 0) h += TABLE_SIZE;
+    return h;
+}
+
+// Get count of a key, returns 0 if not found
+int getCount(int key) {
+    int h = hash(key);
+    Node* curr = hashTable[h];
+    while (curr) {
+        if (curr->key == key) return curr->count;
+        curr = curr->next;
+    }
+    return 0;
+}
+
+// Insert or increment count of a key
+void insertOrIncrement(int key) {
+    int h = hash(key);
+    Node* curr = hashTable[h];
+    while (curr) {
+        if (curr->key == key) {
+            curr->count++;
+            return;
+        }
+        curr = curr->next;
+    }
+    // Not found, create new node
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->count = 1;
+    newNode->next = hashTable[h];
+    hashTable[h] = newNode;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int nums[n];
+    for (int i = 0; i < n; i++)
+        scanf("%d", &nums[i]);
+
+    memset(hashTable, 0, sizeof(hashTable));
+
+    // prefix sum 0 seen once before we start (empty subarray base case)
+    insertOrIncrement(0);
+
+    int prefixSum = 0;
+    long long count = 0;
+
+    for (int i = 0; i < n; i++) {
+        prefixSum += nums[i];
+
+        // If this prefix sum was seen before,
+        // all those subarrays ending here have sum = 0
+        count += getCount(prefixSum);
+
+        insertOrIncrement(prefixSum);
+    }
+
+    printf("%lld\n", count);
+
+    return 0;
+}

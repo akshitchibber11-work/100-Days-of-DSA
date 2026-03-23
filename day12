@@ -1,0 +1,21 @@
+# Function to check symmetry
+def is_symmetric(matrix, m, n):
+    if m != n:
+        return False  # Not a square matrix
+    
+    for i in range(m):
+        for j in range(n):
+            if matrix[i][j] != matrix[j][i]:
+                return False
+    return True
+
+
+# Input
+m, n = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(m)]
+
+# Output
+if is_symmetric(matrix, m, n):
+    print("Symmetric Matrix")
+else:
+    print("Not a Symmetric Matrix")

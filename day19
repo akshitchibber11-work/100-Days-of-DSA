@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Comparator for sorting
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Step 1: Sort the array
+    qsort(arr, n, sizeof(int), compare);
+
+    int left = 0, right = n - 1;
+    int bestLeft = left, bestRight = right;
+    int minSum = abs(arr[left] + arr[right]);
+
+    // Step 2: Two pointer traversal
+    while (left < right) {
+        int sum = arr[left] + arr[right];
+
+        // Update best pair if closer to zero
+        if (abs(sum) < minSum) {
+            minSum = abs(sum);
+            bestLeft = left;
+            bestRight = right;
+        }
+
+        // Move pointers
+        if (sum < 0)
+            left++;       // Sum too negative, increase left
+        else if (sum > 0)
+            right--;      // Sum too positive, decrease right
+        else
+            break;        // sum == 0, can't get closer than this
+    }
+
+    // Print smaller element first
+    if (arr[bestLeft] <= arr[bestRight])
+        printf("%d %d\n", arr[bestLeft], arr[bestRight]);
+    else
+        printf("%d %d\n", arr[bestRight], arr[bestLeft]);
+
+    return 0;
+}

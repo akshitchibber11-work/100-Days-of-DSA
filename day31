@@ -1,0 +1,32 @@
+class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, value):
+        self.stack.append(value)
+
+    def pop(self):
+        if not self.stack:
+            print("Stack Underflow")
+        else:
+            print(self.stack.pop())
+
+    def display(self):
+        if not self.stack:
+            return
+        # Print from top to bottom
+        print(" ".join(map(str, reversed(self.stack))))
+
+
+# Driver code
+n = int(input().strip())
+s = Stack()
+
+for _ in range(n):
+    operation = input().strip().split()
+    if operation[0] == "1":  # push
+        s.push(int(operation[1]))
+    elif operation[0] == "2":  # pop
+        s.pop()
+    elif operation[0] == "3":  # display
+        s.display()

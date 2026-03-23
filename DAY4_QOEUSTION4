@@ -1,0 +1,13 @@
+# Input
+n = int(input())
+arr = list(map(int, input().split()))
+
+# Two-pointer approach
+left, right = 0, n - 1
+while left < right:
+    arr[left], arr[right] = arr[right], arr[left]  # swap
+    left += 1
+    right -= 1
+
+# Output
+print(*arr)
